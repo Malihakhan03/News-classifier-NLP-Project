@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+
+{% block title %}News Headline Classification | AI Dashboard{% endblock %}
+
+{% block content %}
+<!-- Hero Header -->
+<div class="row justify-content-center text-center mb-4">
+    <div class="col-lg-9">
+        <h1 class="display-6 fw-bold text-dark mb-2">
+            News Headline Classification
+        </h1>
+        <p class="lead text-muted fs-6 mb-3">
+            Real-time NLP classifier powered by Machine Learning. Predicts category, provides token-level explainability, and compares multiple algorithms.
+        </p>
+
+        <!-- Category Badges Pill Strip -->
+        <div class="d-flex flex-wrap justify-content-center gap-2 mb-2">
+            {% for cat in categories %}
+            <span class="badge rounded-pill category-pill border px-3 py-2">
+                <i class="bi {{ category_colors.get(cat, {}).get('icon', 'bi-tag') }} me-1 text-primary"></i> {{ cat }}
+            </span>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Main Interactive Section -->
+<div class="row g-4 justify-content-center">
+    
+    <!-- Left Column: Input Form, Model Switcher & Sample Headlines -->
+    <div class="col-lg-6">
+        <div class="card shadow-sm border-0 h-100 rounded-4 main-card">
+            <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                    <h5 class="card-title fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                        <i class="bi bi-pencil-square text-primary"></i> Enter Headline
+                    </h5>
+                    <span class="badge bg-body-tertiary text-muted border fw-normal fs-8" id="charCounter">0 chars</span>
+                </div>
+                <p class="small text-muted mb-0">Type, paste, or dictate a headline using speech recognition</p>
+            </div>
+            <div class="card-body p-4">
+                <form id="classificationForm">
+                    
+                    <!-- Model Selector Strip -->
+                    <div class="mb-3">
+                        <label for="modelSelector" class="form-label small fw-bold text-secondary text-uppercase fs-8 mb-1">
+                            <i class="bi bi-sliders text-primary me-1"></i> Active ML Algorithm:
+                        </label>
+                        <select class="form-select form-select-sm border-2 rounded-3 shadow-none fw-medium" id="modelSelector">
+                            <option value="best" selected>🌟 Best Champion Model ({{ champion_model_name if champion_model_name else 'Selected via 5-Fold CV' }})</option>
+                            <option value="logistic_regression">⚡ Logistic Regression (L2 Regularized)</option>
+                            <option value="linear_svm">🛡️ Linear SVM (Calibrated Probabilities)</option>
+                            <option value="naive_bayes">📊 Multinomial Naive Bayes</option>
+                        </select>
+                    </div>
+
+                    <!-- Textarea Input with Voice Mic Button -->
+                    <div class="mb-3 position-relative">
+                        <textarea 
+                            class="form-control form-control-lg border-2 shadow-none headline-textarea" 
+                            id="headlineInput" 
+                            rows="4" 
+                            placeholder="Enter a news headline here... (e.g. Nvidia unveils next-gen Blackwell GPU architecture for artificial intelligence)"
+                            required
+                        ></textarea>
+                        
+                        <!-- Voice Mic Button -->
+                        <button type="button" class="btn btn-sm btn-light border rounded-pill voice-mic-btn" id="voiceMicBtn" title="Speak to dictate headline">
+                            <i class="bi bi-mic-fill text-danger" id="micIcon"></i>
+                            <span class="small d-none d-sm-inline" id="micText">Dictate</span>
+                        </button>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex gap-2 mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg px-4 flex-grow-1 fw-semibold d-flex align-items-center justify-content-center gap-2" id="classifyBtn">
+                            <i class="bi bi-lightning-charge-fill"></i>
+                            <span>Classify Headline</span>
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-lg px-3" id="clearBtn" title="Clear text">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Clear
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Input Validation Alert -->
+                <div class="alert alert-danger alert-dismissible fade show d-none" id="validationAlert" role="alert">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                        <span id="validationMessage">Please enter a valid headline.</span>
+                    </div>
+                </div>
+
+                <!-- Sample Headlines -->
+                <div class="mt-4 pt-3 border-top">
+                    <h6 class="fw-bold text-dark mb-2 d-flex align-items-center gap-2">
+                        <i class="bi bi-stars text-warning"></i> Clickable Sample Headlines
+                    </h6>
+                    <p class="small text-muted mb-3">Click any sample below to automatically populate the input and classify:</p>
+                    
+                    <div class="d-flex flex-column gap-2 sample-list">
+                        {% for sample in sample_headlines %}
+                        <div class="sample-item p-2 px-3 rounded-3 border bg-body-tertiary d-flex align-items-center justify-content-between" 
+                             data-headline="{{ sample.headline }}">
+                            <div class="d-flex align-items-center gap-2 flex-grow-1 overflow-hidden">
+                                <span class="badge {{ category_colors.get(sample.category, {}).get('badge', 'bg-secondary') }} text-uppercase fs-8 px-2 py-1 flex-shrink-0">
+                                    {{ sample.category }}
+                                </span>
+                                <span class="text-truncate small text-dark sample-text">{{ sample.headline }}</span>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-link text-primary p-0 ms-2 text-decoration-none flex-shrink-0">
+                                Try <i class="bi bi-arrow-up-right"></i>
+                            </button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Prediction Results, Explainability & Multi-Model Comparison -->
+    <div class="col-lg-6">
+        <div class="card shadow-sm border-0 h-100 rounded-4 main-card">
+            <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex align-items-center justify-content-between">
+                <div>
+                    <h5 class="card-title fw-bold text-dark mb-0">
+                        <i class="bi bi-clipboard2-data-fill text-primary me-2"></i> Prediction Result
+                    </h5>
+                    <p class="small text-muted mb-0">Classification outcome and explainable breakdown</p>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-secondary d-none" id="copyResultBtn" title="Copy result text">
+                    <i class="bi bi-clipboard me-1"></i> Copy
+                </button>
+            </div>
+            <div class="card-body p-4">
+
+                <!-- Placeholder State -->
+                <div class="text-center py-5" id="placeholderResult">
+                    <div class="mb-3 text-muted opacity-50">
+                        <i class="bi bi-newspaper display-3"></i>
+                    </div>
+                    <h6 class="fw-semibold text-secondary">Awaiting Headline Submission</h6>
+                    <p class="small text-muted max-w-350 mx-auto">
+                        Submit a news headline on the left to see the predicted category, explainable token weights, and probability distribution.
+                    </p>
+                </div>
+
+                <!-- Loading Spinner State -->
+                <div class="text-center py-5 d-none" id="loadingResult">
+                    <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Analyzing...</span>
+                    </div>
+                    <h6 class="fw-semibold text-dark">Executing NLP Pipeline...</h6>
+                    <p class="small text-muted">Tokenizing, computing TF-IDF vectors & explainable weights...</p>
+                </div>
+
+                <!-- Active Result Container -->
+                <div class="d-none" id="activeResult">
+                    
+                    <!-- Main Category Banner -->
+                    <div class="result-banner p-3 p-md-4 rounded-4 mb-3 text-center border" id="resultBanner">
+                        <span class="text-uppercase tracking-wider small fw-bold text-muted d-block mb-1">Predicted News Category</span>
+                        <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+                            <h2 class="display-6 fw-bold mb-0 text-dark" id="resultCategory">Technology</h2>
+                        </div>
+                        <div class="d-inline-flex align-items-center gap-2 bg-white border rounded-pill px-3 py-1 shadow-xs">
+                            <span class="small text-muted">Predicted Probability:</span>
+                            <span class="fw-bold text-primary fs-6" id="resultConfidence">94.50%</span>
+                        </div>
+                    </div>
+
+                    <!-- Top 3 Ranked Candidates Strip -->
+                    <div class="mb-3 p-3 bg-body-tertiary rounded-3 border d-none" id="top3Container">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="small fw-bold text-dark text-uppercase fs-8">
+                                <i class="bi bi-list-ol text-primary me-1"></i> Top 3 Predicted Candidates:
+                            </span>
+                            <span class="badge bg-secondary text-white fs-8">Calibrated</span>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2" id="top3Badges">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Data-Driven Statistical Uncertainty Alert -->
+                    <div class="alert alert-warning py-2 px-3 small rounded-3 border d-none mb-3" id="uncertainAlert" role="alert">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="bi bi-exclamation-triangle-fill text-warning fs-6 mt-1"></i>
+                            <div>
+                                <strong class="d-block" id="uncertainTitle">Uncertain Prediction (Borderline / Competing Topics):</strong>
+                                <span id="uncertainText"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ambiguity / Low Margin Alert (Backward Compatible) -->
+                    <div class="alert alert-warning py-2 px-3 small rounded-3 border d-none mb-3" id="ambiguityAlert" role="alert">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="bi bi-exclamation-triangle-fill text-warning fs-6 mt-1"></i>
+                            <div>
+                                <strong class="d-block">Category Ambiguity Detected:</strong>
+                                <span id="ambiguityText"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Out-of-Domain / Unknown Alert -->
+                    <div class="alert alert-dark py-2 px-3 small rounded-3 border d-none mb-3" id="unknownAlert" role="alert">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="bi bi-question-circle-fill text-warning fs-6 mt-1"></i>
+                            <div>
+                                <strong class="d-block">Domain Rejection Notice:</strong>
+                                <span id="unknownText"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Explainable NLP: Top Influential Keyword Tokens -->
+                    <div class="mb-3 p-3 bg-body-tertiary rounded-3 border" id="explainabilityContainer">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="small fw-bold text-dark text-uppercase fs-8">
+                                <i class="bi bi-lightbulb-fill text-warning me-1"></i> Key Contributing Words (TF-IDF Weight):
+                            </span>
+                            <span class="badge bg-primary text-white fs-8">Explainable AI</span>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2" id="tokenImportanceBadges">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- NLP Tokens Breakdown -->
+                    <div class="mb-4 p-3 bg-body-tertiary rounded-3 border">
+                        <div class="d-flex align-items-center justify-content-between mb-1">
+                            <span class="small fw-semibold text-muted text-uppercase fs-8">NLP Lemmatized Tokens:</span>
+                            <span class="badge bg-secondary text-white fs-8">NLTK Cleaned</span>
+                        </div>
+                        <p class="font-monospace small text-dark mb-0 bg-white p-2 rounded border" id="preprocessedTokens">
+                            apple announce next generation m4 chip neural engine ai workload
+                        </p>
+                    </div>
+
+                    <!-- Probability Distribution Bar Graph -->
+                    <div class="mb-4">
+                        <h6 class="fw-bold text-dark mb-3 d-flex align-items-center justify-content-between">
+                            <span><i class="bi bi-distribute-horizontal text-primary me-1"></i> Probability Distribution</span>
+                            <span class="badge bg-body-tertiary text-muted border fw-normal fs-8">Calibrated</span>
+                        </h6>
+                        <div class="d-flex flex-column gap-3" id="probabilityBars">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Side-by-Side Multi-Model Predictions -->
+                    <div class="pt-3 border-top">
+                        <h6 class="fw-bold text-dark mb-2 d-flex align-items-center justify-content-between">
+                            <span><i class="bi bi-columns-gap text-info me-1"></i> Multi-Algorithm Agreement</span>
+                            <span class="small text-muted fs-8">All 3 Models</span>
+                        </h6>
+                        <div class="row g-2" id="multiModelCards">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Prediction History Section -->
+<div class="row justify-content-center mt-5">
+    <div class="col-lg-12">
+        <div class="card shadow-sm border-0 rounded-4 main-card">
+            <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex align-items-center justify-content-between">
+                <div>
+                    <h5 class="card-title fw-bold text-dark mb-1">
+                        <i class="bi bi-clock-history text-primary me-2"></i> Prediction History
+                    </h5>
+                    <p class="small text-muted mb-0">Session-based log of recently classified headlines</p>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-danger" id="clearHistoryBtn">
+                    <i class="bi bi-trash3 me-1"></i> Clear History
+                </button>
+            </div>
+            <div class="card-body p-4">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" id="historyTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8">Timestamp</th>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8">News Headline</th>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8">Predicted Category</th>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8 text-end">Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            {% if history %}
+                                {% for item in history %}
+                                <tr>
+                                    <td class="text-muted small text-nowrap">{{ item.timestamp }}</td>
+                                    <td class="fw-medium text-dark">{{ item.headline }}</td>
+                                    <td>
+                                        <span class="badge {{ category_colors.get(item.predicted_category, {}).get('badge', 'bg-secondary') }} px-2 py-1">
+                                            {{ item.predicted_category }}
+                                        </span>
+                                    </td>
+                                    <td class="text-end fw-bold text-primary">{{ item.confidence }}%</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr id="noHistoryRow">
+                                    <td colspan="4" class="text-center py-4 text-muted">
+                                        <i class="bi bi-inbox fs-4 d-block mb-1 opacity-50"></i>
+                                        No prediction history in this session yet. Classify a headline above!
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

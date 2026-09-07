@@ -1,0 +1,321 @@
+/* News Headline Classification - Academic Custom Stylesheet */
+
+:root {
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --card-border-radius: 1rem;
+    --font-main: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --bg-page: #f8fafc;
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+}
+
+[data-bs-theme="dark"] {
+    --bg-page: #0f172a;
+    --card-bg: #1e293b;
+    --border-color: #334155;
+    background-color: #0f172a !important;
+    color: #f1f5f9 !important;
+}
+
+[data-bs-theme="dark"] .card.main-card {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+[data-bs-theme="dark"] .bg-light,
+[data-bs-theme="dark"] .bg-body-tertiary {
+    background-color: #0f172a !important;
+}
+
+[data-bs-theme="dark"] .text-dark {
+    color: #f1f5f9 !important;
+}
+
+[data-bs-theme="dark"] .result-banner {
+    background: linear-gradient(135deg, #064e3b 0%, #065f46 100%) !important;
+    border-color: #047857 !important;
+}
+
+[data-bs-theme="dark"] .category-pill {
+    background-color: #1e293b !important;
+    color: #cbd5e1 !important;
+    border-color: #334155 !important;
+}
+
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select {
+    background-color: #0f172a !important;
+    color: #f1f5f9 !important;
+    border-color: #334155 !important;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-page);
+    color: #1e293b;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+.fs-7 { font-size: 0.825rem; }
+.fs-8 { font-size: 0.75rem; }
+
+.brand-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.navbar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-link {
+    transition: all 0.2s ease-in-out;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.85rem !important;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Category Pill Badges */
+.category-pill {
+    background: #ffffff;
+    color: #334155;
+    font-weight: 500;
+    font-size: 0.825rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-pill:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08);
+}
+
+/* Textarea Input */
+.headline-textarea {
+    resize: none;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    border-radius: 0.75rem;
+    transition: all 0.2s ease;
+    padding-bottom: 2.5rem;
+}
+
+.headline-textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+/* Voice Mic Button */
+.voice-mic-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    z-index: 5;
+    padding: 0.25rem 0.65rem;
+    transition: all 0.2s ease;
+}
+
+.voice-mic-btn.listening {
+    background-color: #fee2e2 !important;
+    border-color: #ef4444 !important;
+    animation: pulseMic 1.5s infinite;
+}
+
+@keyframes pulseMic {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+    100% { transform: scale(1); }
+}
+
+/* Sample Headlines */
+.sample-list {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.sample-item {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sample-item:hover {
+    background-color: #eff6ff !important;
+    border-color: #bfdbfe !important;
+    transform: translateX(2px);
+}
+
+[data-bs-theme="dark"] .sample-item:hover {
+    background-color: #1e3a8a !important;
+    border-color: #3b82f6 !important;
+}
+
+/* Result Banner */
+.result-banner {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1px solid #bbf7d0;
+}
+
+/* Probability Bars */
+.prob-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.prob-pct {
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    font-weight: 600;
+}
+
+.progress {
+    height: 9px;
+    border-radius: 9999px;
+    background-color: #e2e8f0;
+    overflow: hidden;
+}
+
+[data-bs-theme="dark"] .progress {
+    background-color: #334155;
+}
+
+.progress-bar {
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Drop Zone for Batch */
+.drop-zone {
+    border: 2px dashed #cbd5e1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: rgba(248, 250, 252, 0.5);
+}
+
+.drop-zone:hover, .drop-zone.dragover {
+    border-color: #2563eb;
+    background-color: #eff6ff;
+}
+
+[data-bs-theme="dark"] .drop-zone {
+    border-color: #475569;
+    background-color: #0f172a;
+}
+
+.batch-table-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Token Importance Badges */
+.token-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+}
+
+[data-bs-theme="dark"] .token-chip {
+    background: #0f172a;
+    border-color: #475569;
+    color: #f8fafc;
+}
+
+/* Custom Category Badges */
+.bg-teal { background-color: #0d9488 !important; color: white; }
+.bg-indigo { background-color: #6610f2 !important; color: white; }
+.bg-emerald { background-color: #10b981 !important; color: white; }
+.bg-slate { background-color: #475569 !important; color: white; }
+.bg-amber { background-color: #f59e0b !important; color: #1e293b; }
+.bg-pink { background-color: #ec4899 !important; color: white; }
+
+/* Pipeline modal flow */
+.pipeline-flow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.step-card {
+    flex: 1 1 180px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 0.85rem;
+    text-align: center;
+    position: relative;
+}
+
+.step-card.highlight {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+[data-bs-theme="dark"] .step-card {
+    background: #0f172a;
+    border-color: #334155;
+}
+
+.step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: #2563eb;
+    color: white;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-bottom: 0.35rem;
+}
+
+.flow-arrow {
+    color: #94a3b8;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .flow-arrow {
+        display: none;
+    }
+}
+
+.table-row-highlight {
+    background-color: rgba(25, 135, 84, 0.08) !important;
+}
+
+.shadow-xs {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.max-w-350 {
+    max-width: 350px;
+}

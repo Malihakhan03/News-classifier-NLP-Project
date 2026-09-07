@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+
+{% block title %}Model Evaluation & Keyword Explorer | News NLP{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="row justify-content-center text-center mb-4">
+    <div class="col-lg-10">
+        <h1 class="display-6 fw-bold text-dark mb-2">
+            Model Evaluation & Performance Metrics
+        </h1>
+        <p class="lead text-muted fs-6 mb-3">
+            Comprehensive evaluation results, multi-model benchmark comparisons, confusion matrix heatmaps, and category discriminative keywords explorer.
+        </p>
+        {% if evaluation and evaluation.timestamp %}
+        <span class="badge bg-body-tertiary text-muted border px-3 py-2">
+            <i class="bi bi-clock me-1"></i> Last Trained: {{ evaluation.timestamp }}
+        </span>
+        {% endif %}
+    </div>
+</div>
+
+{% if evaluation %}
+<!-- Top KPI Summary Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-4 col-xl-2">
+        <div class="card shadow-sm border-0 rounded-3 text-center p-3 h-100 bg-body-tertiary main-card">
+            <span class="text-secondary small fw-semibold text-uppercase fs-8">Total Samples</span>
+            <h3 class="fw-bold text-dark my-1">{{ evaluation.dataset_stats.total_samples }}</h3>
+            <span class="small text-muted">News Headlines</span>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-xl-2">
+        <div class="card shadow-sm border-0 rounded-3 text-center p-3 h-100 bg-body-tertiary main-card">
+            <span class="text-secondary small fw-semibold text-uppercase fs-8">Train Split</span>
+            <h3 class="fw-bold text-primary my-1">{{ evaluation.dataset_stats.train_samples }}</h3>
+            <span class="small text-muted">80% Stratified</span>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-xl-2">
+        <div class="card shadow-sm border-0 rounded-3 text-center p-3 h-100 bg-body-tertiary main-card">
+            <span class="text-secondary small fw-semibold text-uppercase fs-8">Test Split</span>
+            <h3 class="fw-bold text-success my-1">{{ evaluation.dataset_stats.test_samples }}</h3>
+            <span class="small text-muted">20% Holdout</span>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-xl-2">
+        <div class="card shadow-sm border-0 rounded-3 text-center p-3 h-100 bg-body-tertiary main-card">
+            <span class="text-secondary small fw-semibold text-uppercase fs-8">Categories</span>
+            <h3 class="fw-bold text-info my-1">{{ evaluation.dataset_stats.num_categories }}</h3>
+            <span class="small text-muted">Multiclass</span>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-xl-2">
+        <div class="card shadow-sm border-0 rounded-3 text-center p-3 h-100 bg-body-tertiary main-card">
+            <span class="text-secondary small fw-semibold text-uppercase fs-8">TF-IDF Vocab</span>
+            <h3 class="fw-bold text-warning my-1">{{ evaluation.dataset_stats.vocab_size }}</h3>
+            <span class="small text-muted">N-gram Features</span>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-xl-2">
+        <div class="card shadow-sm border-0 rounded-3 text-center p-3 h-100 bg-body-tertiary border-primary main-card">
+            <span class="text-secondary small fw-semibold text-uppercase fs-8">Best Model Acc</span>
+            <h3 class="fw-bold text-dark my-1">{{ (evaluation.best_model.metrics.accuracy * 100) | round(2) }}%</h3>
+            <span class="badge bg-success text-white fs-8">{{ evaluation.best_model.name }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Section 1: Model Comparison Table & Chart -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-7">
+        <div class="card shadow-sm border-0 rounded-4 h-100 main-card">
+            <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
+                <h5 class="card-title fw-bold text-dark mb-1">
+                    <i class="bi bi-trophy-fill text-warning me-2"></i> Model Comparison on Holdout Test Set
+                </h5>
+                <p class="small text-muted mb-0">Multi-algorithm benchmark using Stratified 80/20 Test Split</p>
+            </div>
+            <div class="card-body p-4">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8">Algorithm</th>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8 text-center">5-Fold CV F1 (Train)</th>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8 text-center">Test Accuracy</th>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8 text-center">Test Precision</th>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8 text-center">Test Recall</th>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8 text-center">Test F1-Score</th>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8 text-end">Train Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for model_name, metrics in evaluation.model_comparison.items() %}
+                            <tr {% if model_name == evaluation.best_model.name %}class="table-success table-row-highlight"{% endif %}>
+                                <td>
+                                    <span class="fw-bold text-dark">{{ model_name }}</span>
+                                    {% if model_name == evaluation.best_model.name %}
+                                    <span class="badge bg-success text-white ms-1 px-2 py-1 fs-8">Champion Model</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center fw-semibold text-primary">
+                                    {% if metrics.cv_weighted_f1 %}
+                                        {{ (metrics.cv_weighted_f1 * 100) | round(2) }}%
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td class="text-center fw-semibold">{{ (metrics.accuracy * 100) | round(2) }}%</td>
+                                <td class="text-center">{{ (metrics.precision_weighted * 100) | round(2) }}%</td>
+                                <td class="text-center">{{ (metrics.recall_weighted * 100) | round(2) }}%</td>
+                                <td class="text-center fw-bold text-dark">{{ (metrics.f1_weighted * 100) | round(2) }}%</td>
+                                <td class="text-end text-muted small">{{ metrics.train_time_sec }}s</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4 p-3 bg-body-tertiary rounded-3 border">
+                    <h6 class="fw-bold text-dark mb-1 small text-uppercase">Unbiased Model Selection & Evaluation Methodology:</h6>
+                    <p class="small text-muted mb-0">
+                        The champion model is selected based on the <strong>Stratified 5-Fold Cross-Validation Weighted F1-Score on the Training Data</strong>. The holdout 20% test set remains completely untouched during model selection and hyperparameter tuning, and is evaluated strictly once for unbiased final performance reporting.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparison Chart Image -->
+    <div class="col-lg-5">
+        <div class="card shadow-sm border-0 rounded-4 h-100 main-card">
+            <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
+                <h5 class="card-title fw-bold text-dark mb-1">
+                    <i class="bi bi-bar-chart-fill text-primary me-2"></i> Metric Comparison Chart
+                </h5>
+                <p class="small text-muted mb-0">Visual comparison generated via Matplotlib/Seaborn</p>
+            </div>
+            <div class="card-body p-4 text-center">
+                <img src="{{ url_for('static', filename='images/model_comparison.png') }}" 
+                     alt="Model Performance Comparison" 
+                     class="img-fluid rounded-3 border shadow-xs">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section: Difficult Boundary Holdout Benchmark -->
+{% if evaluation.difficult_benchmark %}
+<div class="row g-4 mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-4 main-card">
+            <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex align-items-center justify-content-between">
+                <div>
+                    <h5 class="card-title fw-bold text-dark mb-1">
+                        <i class="bi bi-shield-check text-success me-2"></i> Difficult Boundary Holdout Benchmark
+                    </h5>
+                    <p class="small text-muted mb-0">Independent evaluation on 150 challenging boundary cases across 9 confusing pairs (Strictly zero training leakage)</p>
+                </div>
+                <span class="badge bg-primary px-3 py-2">Untouched Holdout</span>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-3 mb-3">
+                    {% for model_name, d_res in evaluation.difficult_benchmark.items() %}
+                    <div class="col-md-4">
+                        <div class="p-3 bg-body-tertiary rounded-3 border h-100 {% if model_name == evaluation.best_model.name %}border-primary border-2{% endif %}">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="fw-bold text-dark">{{ model_name }}</span>
+                                {% if model_name == evaluation.best_model.name %}
+                                <span class="badge bg-success text-white fs-8">Champion</span>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex justify-content-between small text-muted mb-1">
+                                <span>Boundary Accuracy:</span>
+                                <strong class="text-dark">{{ (d_res.accuracy * 100) | round(2) }}%</strong>
+                            </div>
+                            <div class="d-flex justify-content-between small text-muted mb-1">
+                                <span>Macro F1-Score:</span>
+                                <strong class="text-primary">{{ (d_res.f1_macro * 100) | round(2) }}%</strong>
+                            </div>
+                            <div class="d-flex justify-content-between small text-muted">
+                                <span>Weighted F1-Score:</span>
+                                <strong class="text-success">{{ (d_res.f1_weighted * 100) | round(2) }}%</strong>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="p-3 bg-body-tertiary rounded-3 border">
+                    <p class="small text-muted mb-0">
+                        <i class="bi bi-info-circle text-primary me-1"></i>
+                        <strong>Boundary Pairs Tested:</strong> Politics ↔ World, Tech ↔ Business, Tech ↔ Science, Science ↔ Health, Tech ↔ Auto, Environment ↔ Weather, Sports ↔ Entertainment, Crime ↔ Tech, and Lifestyle ↔ Business. Evaluated on headlines where the category name is not explicitly mentioned.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Section 2: Category Top Keywords Explorer (Explainability Feature) -->
+{% if category_keywords %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-4 main-card">
+            <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
+                <h5 class="card-title fw-bold text-dark mb-1">
+                    <i class="bi bi-key-fill text-warning me-2"></i> Category Discriminative Keywords Explorer
+                </h5>
+                <p class="small text-muted mb-0">Top TF-IDF n-grams with highest positive feature weights for each category</p>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-3">
+                    {% for cat, kws in category_keywords.items() %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="p-3 bg-body-tertiary rounded-3 border h-100">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="badge {{ category_colors.get(cat, {}).get('badge', 'bg-secondary') }} px-2 py-1 fs-7">
+                                    <i class="bi {{ category_colors.get(cat, {}).get('icon', 'bi-tag') }} me-1"></i> {{ cat }}
+                                </span>
+                                <span class="text-muted small fs-8">Top N-Grams</span>
+                            </div>
+                            <div class="d-flex flex-wrap gap-1">
+                                {% for item in kws[:10] %}
+                                <span class="badge bg-white text-dark border px-2 py-1 small fw-normal" title="Weight: +{{ item.weight }}">
+                                    {{ item.keyword }} <span class="text-muted fs-8">+{{ item.weight }}</span>
+                                </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Section 3: Confusion Matrix & Class Distribution -->
+<div class="row g-4 mb-4">
+    <!-- Confusion Matrix Heatmap -->
+    <div class="col-lg-6">
+        <div class="card shadow-sm border-0 rounded-4 h-100 main-card">
+            <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
+                <h5 class="card-title fw-bold text-dark mb-1">
+                    <i class="bi bi-grid-3x3-gap-fill text-primary me-2"></i> Confusion Matrix Heatmap
+                </h5>
+                <p class="small text-muted mb-0">Actual vs Predicted categories for <strong>{{ evaluation.best_model.name }}</strong></p>
+            </div>
+            <div class="card-body p-4 text-center">
+                <img src="{{ url_for('static', filename='images/confusion_matrix.png') }}" 
+                     alt="Confusion Matrix Heatmap" 
+                     class="img-fluid rounded-3 border shadow-xs">
+            </div>
+        </div>
+    </div>
+
+    <!-- Class Distribution -->
+    <div class="col-lg-6">
+        <div class="card shadow-sm border-0 rounded-4 h-100 main-card">
+            <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
+                <h5 class="card-title fw-bold text-dark mb-1">
+                    <i class="bi bi-pie-chart-fill text-info me-2"></i> Dataset Class Distribution
+                </h5>
+                <p class="small text-muted mb-0">Number of headlines per news topic in <code>data/news.csv</code></p>
+            </div>
+            <div class="card-body p-4 text-center">
+                <img src="{{ url_for('static', filename='images/class_distribution.png') }}" 
+                     alt="Class Distribution Chart" 
+                     class="img-fluid rounded-3 border shadow-xs mb-3">
+
+                <!-- Table Breakdown -->
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    {% for cat, count in evaluation.dataset_stats.class_distribution.items() %}
+                    <div class="p-2 px-3 bg-body-tertiary rounded-3 border small">
+                        <span class="fw-semibold text-dark">{{ cat }}:</span> 
+                        <span class="badge {{ category_colors.get(cat, {}).get('badge', 'bg-secondary') }}">{{ count }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section 4: Per-Class Classification Report Table -->
+{% if evaluation.best_model.classification_report %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-4 main-card">
+            <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
+                <h5 class="card-title fw-bold text-dark mb-1">
+                    <i class="bi bi-table text-primary me-2"></i> Per-Class Classification Report ({{ evaluation.best_model.name }})
+                </h5>
+                <p class="small text-muted mb-0">Precision, Recall, F1-Score, and Support breakdown for each individual news category</p>
+            </div>
+            <div class="card-body p-4">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8">Category</th>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8 text-center">Precision</th>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8 text-center">Recall</th>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8 text-center">F1-Score</th>
+                                <th scope="col" class="py-3 text-secondary text-uppercase fs-8 text-end">Test Support (Samples)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cat in evaluation.dataset_stats.categories %}
+                            {% set report_item = evaluation.best_model.classification_report.get(cat, {}) %}
+                            <tr>
+                                <td>
+                                    <span class="badge {{ category_colors.get(cat, {}).get('badge', 'bg-secondary') }} px-2 py-1">
+                                        {{ cat }}
+                                    </span>
+                                </td>
+                                <td class="text-center">{{ (report_item.get('precision', 0) * 100) | round(2) }}%</td>
+                                <td class="text-center">{{ (report_item.get('recall', 0) * 100) | round(2) }}%</td>
+                                <td class="text-center fw-bold text-primary">{{ (report_item.get('f1-score', 0) * 100) | round(2) }}%</td>
+                                <td class="text-end text-muted">{{ report_item.get('support', 0) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endif %}
+
+{% endblock %}

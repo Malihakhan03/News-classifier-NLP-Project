@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}News Headline Classification | NLP Project{% endblock %}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm py-2">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="{{ url_for('home') }}">
+                <span class="brand-badge"><i class="bi bi-newspaper"></i></span>
+                <span>NewsClassifier</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-1 align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/' %}active fw-semibold{% endif %}"
+                            href="{{ url_for('home') }}">
+                            <i class="bi bi-speedometer2 me-1"></i> Classifier
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/batch' %}active fw-semibold{% endif %}"
+                            href="{{ url_for('batch_page') }}">
+                            <i class="bi bi-collection-play me-1"></i> Batch Upload
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/evaluation' %}active fw-semibold{% endif %}"
+                            href="{{ url_for('evaluation') }}">
+                            <i class="bi bi-bar-chart-line me-1"></i> Model Evaluation
+                        </a>
+                    </li>
+
+                    <li class="nav-item ms-lg-2">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#architectureModal"
+                            title="Pipeline Architecture">
+                            <i class="bi bi-diagram-3 me-1"></i> Architecture
+                        </a>
+                    </li>
+                    <!-- Theme Toggle Switcher -->
+                    <li class="nav-item ms-lg-2">
+                        <button class="btn btn-sm btn-outline-light rounded-circle theme-toggle-btn" id="themeToggleBtn"
+                            title="Toggle Dark/Light Mode">
+                            <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="container py-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Architecture & NLP Pipeline Modal -->
+    <div class="modal fade" id="architectureModal" tabindex="-1" aria-labelledby="architectureModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold" id="architectureModalLabel">
+                        <i class="bi bi-diagram-3-fill text-primary me-2"></i> NLP Classification Pipeline Architecture
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="pipeline-flow">
+                        <div class="step-card">
+                            <div class="step-num">1</div>
+                            <h6>Headline Input</h6>
+                            <p class="small text-muted mb-0">Raw headline string or batch CSV dataset</p>
+                        </div>
+                        <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+                        <div class="step-card">
+                            <div class="step-num">2</div>
+                            <h6>Text Preprocessing</h6>
+                            <p class="small text-muted mb-0">Lowercasing, URL/HTML stripping, alphanumeric token
+                                retention</p>
+                        </div>
+                        <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+                        <div class="step-card">
+                            <div class="step-num">3</div>
+                            <h6>Tokenize & Lemmatize</h6>
+                            <p class="small text-muted mb-0">NLTK word tokenization, stopword removal, WordNet
+                                lemmatizer</p>
+                        </div>
+                    </div>
+                    <div class="pipeline-flow mt-3">
+                        <div class="step-card">
+                            <div class="step-num">4</div>
+                            <h6>TF-IDF Extraction</h6>
+                            <p class="small text-muted mb-0">Unigram + bigram n-grams, sublinear term frequency
+                                weighting</p>
+                        </div>
+                        <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+                        <div class="step-card">
+                            <div class="step-num">5</div>
+                            <h6>ML Classifier</h6>
+                            <p class="small text-muted mb-0">Multinomial Naive Bayes / Calibrated Linear SVM / Logistic
+                                Regression</p>
+                        </div>
+                        <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+                        <div class="step-card highlight">
+                            <div class="step-num">6</div>
+                            <h6>Explainable Output</h6>
+                            <p class="small text-muted mb-0">Calibrated probabilities + token importance scores</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto py-4 border-top text-center text-muted">
+        <div class="container">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <p class="mb-0 small fw-medium">News Headline Classification &bull; NLP Project By Maliha Nazim Khan</p>
+                <div class="d-flex gap-3 small">
+                    <a href="{{ url_for('home') }}" class="text-decoration-none text-muted">Classifier</a>
+                    <a href="{{ url_for('batch_page') }}" class="text-decoration-none text-muted">Batch Mode</a>
+                    <a href="{{ url_for('evaluation') }}" class="text-decoration-none text-muted">Model Evaluation</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

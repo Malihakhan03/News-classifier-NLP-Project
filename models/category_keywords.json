@@ -1,0 +1,932 @@
+{
+    "Automobile": [
+        {
+            "keyword": "car",
+            "weight": 18.7677
+        },
+        {
+            "keyword": "crash",
+            "weight": 15.1855
+        },
+        {
+            "keyword": "driver",
+            "weight": 12.8954
+        },
+        {
+            "keyword": "recall",
+            "weight": 11.7188
+        },
+        {
+            "keyword": "truck",
+            "weight": 11.2613
+        },
+        {
+            "keyword": "drive",
+            "weight": 9.9164
+        },
+        {
+            "keyword": "traffic",
+            "weight": 9.7618
+        },
+        {
+            "keyword": "ford",
+            "weight": 9.3414
+        },
+        {
+            "keyword": "highway",
+            "weight": 7.2777
+        },
+        {
+            "keyword": "vehicle",
+            "weight": 7.0661
+        },
+        {
+            "keyword": "tesla",
+            "weight": 6.4626
+        },
+        {
+            "keyword": "volkswagen",
+            "weight": 4.9783
+        },
+        {
+            "keyword": "dodge",
+            "weight": 4.8265
+        },
+        {
+            "keyword": "automotive",
+            "weight": 4.7554
+        },
+        {
+            "keyword": "suv",
+            "weight": 4.4454
+        }
+    ],
+    "Business & Economy": [
+        {
+            "keyword": "business",
+            "weight": 4.8994
+        },
+        {
+            "keyword": "job",
+            "weight": 4.8323
+        },
+        {
+            "keyword": "tax",
+            "weight": 4.8091
+        },
+        {
+            "keyword": "bank",
+            "weight": 4.5847
+        },
+        {
+            "keyword": "market",
+            "weight": 4.3116
+        },
+        {
+            "keyword": "credit",
+            "weight": 4.1117
+        },
+        {
+            "keyword": "financial",
+            "weight": 3.9897
+        },
+        {
+            "keyword": "company",
+            "weight": 3.9776
+        },
+        {
+            "keyword": "mortgage",
+            "weight": 3.96
+        },
+        {
+            "keyword": "corporate",
+            "weight": 3.7041
+        },
+        {
+            "keyword": "worker",
+            "weight": 3.6224
+        },
+        {
+            "keyword": "money",
+            "weight": 3.5716
+        },
+        {
+            "keyword": "consumer",
+            "weight": 3.5621
+        },
+        {
+            "keyword": "woman business",
+            "weight": 3.5619
+        },
+        {
+            "keyword": "startup",
+            "weight": 3.4418
+        }
+    ],
+    "Crime & Justice": [
+        {
+            "keyword": "police",
+            "weight": 7.3805
+        },
+        {
+            "keyword": "shoot",
+            "weight": 7.0183
+        },
+        {
+            "keyword": "accuse",
+            "weight": 5.9222
+        },
+        {
+            "keyword": "cop",
+            "weight": 5.7749
+        },
+        {
+            "keyword": "man",
+            "weight": 5.2777
+        },
+        {
+            "keyword": "prison",
+            "weight": 5.1268
+        },
+        {
+            "keyword": "arrest",
+            "weight": 4.791
+        },
+        {
+            "keyword": "kill",
+            "weight": 4.6645
+        },
+        {
+            "keyword": "murder",
+            "weight": 4.6515
+        },
+        {
+            "keyword": "allegedly",
+            "weight": 4.4234
+        },
+        {
+            "keyword": "suspect",
+            "weight": 4.3784
+        },
+        {
+            "keyword": "federal",
+            "weight": 4.3703
+        },
+        {
+            "keyword": "officer",
+            "weight": 4.2856
+        },
+        {
+            "keyword": "charge",
+            "weight": 4.0631
+        },
+        {
+            "keyword": "allege",
+            "weight": 3.8764
+        }
+    ],
+    "Education": [
+        {
+            "keyword": "college",
+            "weight": 10.7904
+        },
+        {
+            "keyword": "education",
+            "weight": 9.3248
+        },
+        {
+            "keyword": "university",
+            "weight": 8.2003
+        },
+        {
+            "keyword": "school",
+            "weight": 8.1564
+        },
+        {
+            "keyword": "student",
+            "weight": 7.709
+        },
+        {
+            "keyword": "teacher",
+            "weight": 7.3237
+        },
+        {
+            "keyword": "campus",
+            "weight": 5.4929
+        },
+        {
+            "keyword": "fraternity",
+            "weight": 4.5185
+        },
+        {
+            "keyword": "professor",
+            "weight": 4.353
+        },
+        {
+            "keyword": "teach",
+            "weight": 4.0407
+        },
+        {
+            "keyword": "learn",
+            "weight": 4.0314
+        },
+        {
+            "keyword": "frat",
+            "weight": 3.9401
+        },
+        {
+            "keyword": "graduation",
+            "weight": 3.635
+        },
+        {
+            "keyword": "commencement",
+            "weight": 3.6264
+        },
+        {
+            "keyword": "educational",
+            "weight": 3.362
+        }
+    ],
+    "Entertainment & Culture": [
+        {
+            "keyword": "artist",
+            "weight": 4.8704
+        },
+        {
+            "keyword": "movie",
+            "weight": 4.8326
+        },
+        {
+            "keyword": "film",
+            "weight": 4.5869
+        },
+        {
+            "keyword": "snl",
+            "weight": 4.2408
+        },
+        {
+            "keyword": "album",
+            "weight": 3.9798
+        },
+        {
+            "keyword": "trailer",
+            "weight": 3.857
+        },
+        {
+            "keyword": "art",
+            "weight": 3.5207
+        },
+        {
+            "keyword": "colbert",
+            "weight": 3.1867
+        },
+        {
+            "keyword": "box office",
+            "weight": 3.0129
+        },
+        {
+            "keyword": "song",
+            "weight": 2.9411
+        },
+        {
+            "keyword": "performance",
+            "weight": 2.8831
+        },
+        {
+            "keyword": "sequel",
+            "weight": 2.8677
+        },
+        {
+            "keyword": "celebrity",
+            "weight": 2.8442
+        },
+        {
+            "keyword": "stephen colbert",
+            "weight": 2.827
+        },
+        {
+            "keyword": "john",
+            "weight": 2.7854
+        }
+    ],
+    "Environment & Climate": [
+        {
+            "keyword": "climate",
+            "weight": 8.6966
+        },
+        {
+            "keyword": "animal",
+            "weight": 5.7976
+        },
+        {
+            "keyword": "dog",
+            "weight": 5.7876
+        },
+        {
+            "keyword": "elephant",
+            "weight": 4.4769
+        },
+        {
+            "keyword": "whale",
+            "weight": 4.4762
+        },
+        {
+            "keyword": "fracking",
+            "weight": 4.4612
+        },
+        {
+            "keyword": "environmental",
+            "weight": 4.3484
+        },
+        {
+            "keyword": "sustainability",
+            "weight": 4.3121
+        },
+        {
+            "keyword": "carbon",
+            "weight": 4.2204
+        },
+        {
+            "keyword": "oil",
+            "weight": 4.2184
+        },
+        {
+            "keyword": "energy",
+            "weight": 4.0422
+        },
+        {
+            "keyword": "green",
+            "weight": 4.0225
+        },
+        {
+            "keyword": "zoo",
+            "weight": 3.5752
+        },
+        {
+            "keyword": "pipeline",
+            "weight": 3.552
+        },
+        {
+            "keyword": "storm",
+            "weight": 3.5418
+        }
+    ],
+    "Health & Medicine": [
+        {
+            "keyword": "cancer",
+            "weight": 13.7972
+        },
+        {
+            "keyword": "disease",
+            "weight": 9.1517
+        },
+        {
+            "keyword": "depression",
+            "weight": 8.2922
+        },
+        {
+            "keyword": "anxiety",
+            "weight": 8.1042
+        },
+        {
+            "keyword": "medicine",
+            "weight": 8.0882
+        },
+        {
+            "keyword": "diabetes",
+            "weight": 7.7793
+        },
+        {
+            "keyword": "drug",
+            "weight": 7.5264
+        },
+        {
+            "keyword": "medical",
+            "weight": 7.2801
+        },
+        {
+            "keyword": "pain",
+            "weight": 7.1412
+        },
+        {
+            "keyword": "doctor",
+            "weight": 6.7928
+        },
+        {
+            "keyword": "therapy",
+            "weight": 6.7619
+        },
+        {
+            "keyword": "alzheimer",
+            "weight": 6.3257
+        },
+        {
+            "keyword": "virus",
+            "weight": 6.1159
+        },
+        {
+            "keyword": "autism",
+            "weight": 5.8677
+        },
+        {
+            "keyword": "treatment",
+            "weight": 5.864
+        }
+    ],
+    "Lifestyle & Travel": [
+        {
+            "keyword": "photo",
+            "weight": 8.6543
+        },
+        {
+            "keyword": "travel",
+            "weight": 5.4242
+        },
+        {
+            "keyword": "recipe",
+            "weight": 5.2441
+        },
+        {
+            "keyword": "hotel",
+            "weight": 4.802
+        },
+        {
+            "keyword": "fashion",
+            "weight": 4.7157
+        },
+        {
+            "keyword": "dress",
+            "weight": 4.4568
+        },
+        {
+            "keyword": "best",
+            "weight": 4.3498
+        },
+        {
+            "keyword": "style",
+            "weight": 3.9621
+        },
+        {
+            "keyword": "food",
+            "weight": 3.9088
+        },
+        {
+            "keyword": "beauty",
+            "weight": 3.8291
+        },
+        {
+            "keyword": "hair",
+            "weight": 3.8109
+        },
+        {
+            "keyword": "airline",
+            "weight": 3.7587
+        },
+        {
+            "keyword": "vacation",
+            "weight": 3.5733
+        },
+        {
+            "keyword": "cocktail",
+            "weight": 3.5103
+        },
+        {
+            "keyword": "chef",
+            "weight": 3.4422
+        }
+    ],
+    "Politics & Government": [
+        {
+            "keyword": "trump",
+            "weight": 8.8628
+        },
+        {
+            "keyword": "government",
+            "weight": 5.422
+        },
+        {
+            "keyword": "election",
+            "weight": 5.3568
+        },
+        {
+            "keyword": "obama",
+            "weight": 5.1105
+        },
+        {
+            "keyword": "gop",
+            "weight": 5.0811
+        },
+        {
+            "keyword": "democrat",
+            "weight": 4.5454
+        },
+        {
+            "keyword": "cabinet",
+            "weight": 4.4329
+        },
+        {
+            "keyword": "republican",
+            "weight": 4.0475
+        },
+        {
+            "keyword": "congress",
+            "weight": 3.9437
+        },
+        {
+            "keyword": "clinton",
+            "weight": 3.4226
+        },
+        {
+            "keyword": "minister",
+            "weight": 3.4207
+        },
+        {
+            "keyword": "state",
+            "weight": 3.3448
+        },
+        {
+            "keyword": "prime minister",
+            "weight": 3.3045
+        },
+        {
+            "keyword": "ferguson",
+            "weight": 3.2369
+        },
+        {
+            "keyword": "lawmaker",
+            "weight": 3.2302
+        }
+    ],
+    "Science": [
+        {
+            "keyword": "space",
+            "weight": 12.119
+        },
+        {
+            "keyword": "mar",
+            "weight": 7.482
+        },
+        {
+            "keyword": "scientist",
+            "weight": 6.7299
+        },
+        {
+            "keyword": "science",
+            "weight": 5.9997
+        },
+        {
+            "keyword": "ancient",
+            "weight": 4.6746
+        },
+        {
+            "keyword": "planet",
+            "weight": 4.6166
+        },
+        {
+            "keyword": "earth",
+            "weight": 4.4627
+        },
+        {
+            "keyword": "dna",
+            "weight": 4.4536
+        },
+        {
+            "keyword": "quantum",
+            "weight": 4.3756
+        },
+        {
+            "keyword": "gene",
+            "weight": 4.3352
+        },
+        {
+            "keyword": "discover",
+            "weight": 4.2348
+        },
+        {
+            "keyword": "specie",
+            "weight": 4.1657
+        },
+        {
+            "keyword": "may",
+            "weight": 3.9707
+        },
+        {
+            "keyword": "telescope",
+            "weight": 3.8857
+        },
+        {
+            "keyword": "laser",
+            "weight": 3.8636
+        }
+    ],
+    "Social Issues & Society": [
+        {
+            "keyword": "gay",
+            "weight": 8.0278
+        },
+        {
+            "keyword": "queer",
+            "weight": 5.6132
+        },
+        {
+            "keyword": "kid",
+            "weight": 5.0808
+        },
+        {
+            "keyword": "black",
+            "weight": 4.9854
+        },
+        {
+            "keyword": "child",
+            "weight": 4.8256
+        },
+        {
+            "keyword": "parent",
+            "weight": 4.7756
+        },
+        {
+            "keyword": "latino",
+            "weight": 4.3395
+        },
+        {
+            "keyword": "woman",
+            "weight": 4.077
+        },
+        {
+            "keyword": "trans",
+            "weight": 3.8744
+        },
+        {
+            "keyword": "son",
+            "weight": 3.8219
+        },
+        {
+            "keyword": "mom",
+            "weight": 3.6808
+        },
+        {
+            "keyword": "daughter",
+            "weight": 3.5093
+        },
+        {
+            "keyword": "lgbt",
+            "weight": 3.4142
+        },
+        {
+            "keyword": "transgender",
+            "weight": 3.1756
+        },
+        {
+            "keyword": "boy",
+            "weight": 3.1023
+        }
+    ],
+    "Sports": [
+        {
+            "keyword": "olympic",
+            "weight": 7.8629
+        },
+        {
+            "keyword": "nfl",
+            "weight": 7.7678
+        },
+        {
+            "keyword": "cup",
+            "weight": 5.607
+        },
+        {
+            "keyword": "football",
+            "weight": 5.5717
+        },
+        {
+            "keyword": "nba",
+            "weight": 5.448
+        },
+        {
+            "keyword": "sport",
+            "weight": 4.7666
+        },
+        {
+            "keyword": "olympics",
+            "weight": 4.5092
+        },
+        {
+            "keyword": "league",
+            "weight": 4.4495
+        },
+        {
+            "keyword": "team",
+            "weight": 4.4437
+        },
+        {
+            "keyword": "soccer",
+            "weight": 4.4255
+        },
+        {
+            "keyword": "lebron",
+            "weight": 4.2923
+        },
+        {
+            "keyword": "player",
+            "weight": 4.1964
+        },
+        {
+            "keyword": "fan",
+            "weight": 3.961
+        },
+        {
+            "keyword": "win",
+            "weight": 3.9094
+        },
+        {
+            "keyword": "game",
+            "weight": 3.879
+        }
+    ],
+    "Technology": [
+        {
+            "keyword": "microsoft",
+            "weight": 12.2565
+        },
+        {
+            "keyword": "google",
+            "weight": 9.3503
+        },
+        {
+            "keyword": "apple",
+            "weight": 8.5419
+        },
+        {
+            "keyword": "linux",
+            "weight": 7.7906
+        },
+        {
+            "keyword": "internet",
+            "weight": 7.735
+        },
+        {
+            "keyword": "software",
+            "weight": 7.3446
+        },
+        {
+            "keyword": "intel",
+            "weight": 7.0692
+        },
+        {
+            "keyword": "oracle",
+            "weight": 6.921
+        },
+        {
+            "keyword": "wireless",
+            "weight": 6.6943
+        },
+        {
+            "keyword": "phone",
+            "weight": 6.3858
+        },
+        {
+            "keyword": "security",
+            "weight": 6.3428
+        },
+        {
+            "keyword": "pc",
+            "weight": 5.9861
+        },
+        {
+            "keyword": "chip",
+            "weight": 5.7031
+        },
+        {
+            "keyword": "facebook",
+            "weight": 5.1141
+        },
+        {
+            "keyword": "server",
+            "weight": 4.8892
+        }
+    ],
+    "Weather & Disaster": [
+        {
+            "keyword": "storm",
+            "weight": 13.8459
+        },
+        {
+            "keyword": "hurricane",
+            "weight": 13.6563
+        },
+        {
+            "keyword": "flood",
+            "weight": 12.3665
+        },
+        {
+            "keyword": "earthquake",
+            "weight": 11.4107
+        },
+        {
+            "keyword": "wildfire",
+            "weight": 9.8932
+        },
+        {
+            "keyword": "drought",
+            "weight": 8.1458
+        },
+        {
+            "keyword": "tornado",
+            "weight": 8.0818
+        },
+        {
+            "keyword": "tsunami",
+            "weight": 7.886
+        },
+        {
+            "keyword": "blizzard",
+            "weight": 7.7216
+        },
+        {
+            "keyword": "landslide",
+            "weight": 7.5543
+        },
+        {
+            "keyword": "forecast",
+            "weight": 7.2696
+        },
+        {
+            "keyword": "cyclone",
+            "weight": 5.1494
+        },
+        {
+            "keyword": "typhoon",
+            "weight": 4.8827
+        },
+        {
+            "keyword": "avalanche",
+            "weight": 4.455
+        },
+        {
+            "keyword": "heatwave",
+            "weight": 4.0118
+        }
+    ],
+    "World & International": [
+        {
+            "keyword": "international",
+            "weight": 6.3345
+        },
+        {
+            "keyword": "isi",
+            "weight": 4.8577
+        },
+        {
+            "keyword": "refugee",
+            "weight": 4.7544
+        },
+        {
+            "keyword": "china",
+            "weight": 4.7207
+        },
+        {
+            "keyword": "syrian",
+            "weight": 4.6322
+        },
+        {
+            "keyword": "korea",
+            "weight": 4.3302
+        },
+        {
+            "keyword": "iraq",
+            "weight": 4.2684
+        },
+        {
+            "keyword": "saudi",
+            "weight": 4.2575
+        },
+        {
+            "keyword": "brexit",
+            "weight": 4.1079
+        },
+        {
+            "keyword": "israel",
+            "weight": 4.0829
+        },
+        {
+            "keyword": "syria",
+            "weight": 4.0005
+        },
+        {
+            "keyword": "nation",
+            "weight": 3.8729
+        },
+        {
+            "keyword": "unite nation",
+            "weight": 3.7511
+        },
+        {
+            "keyword": "india",
+            "weight": 3.7108
+        },
+        {
+            "keyword": "putin",
+            "weight": 3.5788
+        }
+    ]
+}
