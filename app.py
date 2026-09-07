@@ -552,6 +552,7 @@ def clear_history():
     session.modified = True
     return jsonify({"success": True, "message": "History cleared successfully."})
 
+app = app
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
