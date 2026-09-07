@@ -24,7 +24,21 @@ import pandas as pd
 from flask import Flask, render_template, request, jsonify, session, Response
 
 from preprocessing import clean_headline, validate_headline, explain_prediction_tokens, clean_headlines_batch
+import nltk
 
+# Set NLTK download directory to Vercel's writable /tmp folder
+nltk_data_dir = os.path.join('/tmp', 'nltk_data')
+if not os.path.exists(nltk_data_dir):
+    os.makedirs(nltk_data_dir)
+
+nltk.data.path.append(nltk_data_dir)
+
+# Download required NLTK resources to /tmp
+for resource in ['wordnet', 'omw-1.4', 'stopwords', 'punkt']:
+    try:
+        nltk.data.find(resource)
+    except LookupError:
+        nltk.download(resource, download_dir=nltk_data_dir)
 # Initialize Flask application
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
